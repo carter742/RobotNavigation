@@ -138,3 +138,14 @@ void loop() {
   executeCmds();
 }
 ```
+
+# Experimental Features
+- lockPins(): this has not been tested but it could stop the arduino from starting the motors on code upload.
+- checkForPonds(): Currently only toggles a flag to check for ponds. Does not actaully do anything else yet.
+
+# To-Do:
+1) Colour Sensor Code
+2) Arm Motor Code
+3) Turning in reverse
+4) Refine Line Sensor Code
+5) Pond Circling Code (Only if Soft Turn Fails)

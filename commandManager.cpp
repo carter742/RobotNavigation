@@ -1,0 +1,193 @@
+#include "commandManager.h"
+
+const uint8_t MAX_CMD_NUMBER = 50;
+const uint8_t LINE_BASED_CMD_START = 100;
+
+enum CmdType : uint8_t {
+  DRIVE_FORWARD,
+  DRIVE_BACKWARD,
+  TURN_LEFT,
+  TURN_RIGHT,
+  TURN_LEFT_SOFT,
+  TURN_RIGHT_SOFT,
+  TURN_LEFT_HARD,
+  TURN_RIGHT_HARD,
+  CHECK_FOR_PONDS,
+  STOP_CHECKING_FOR_PONDS,
+};
+
+struct Command {
+  CmdType cmdType;
+  ExitCondition exitCondition;
+  uint8_t speedL;
+  uint8_t speedR;
+};
+
+Command cmds[MAX_CMD_NUMBER];
+
+Timer timer;
+
+uint8_t numberOfCmds = 0;
+uint8_t i = 0;
+
+bool isCheckingForPonds = false;
+
+void handleExitCondition(const ExitCondition exitCondition);
+void addCmd(Command command);
+
+bool executeCmds() {
+  if (i == numberOfCmds) {
+    stopDriving();
+    return false;
+  }
+
+  const Command cmd = cmds[i];
+  Serial.println(cmd.cmdType);
+
+  switch (cmd.cmdType) {
+    case DRIVE_FORWARD:
+      driveForward(cmd.speedL);
+      break;
+    case DRIVE_BACKWARD:
+      driveBackward(cmd.speedL);
+      break;
+    case TURN_LEFT:
+    case TURN_RIGHT:
+      rightWheelForward(cmd.speedR);
+      leftWheelForward(cmd.speedL);
+      break;
+    case TURN_LEFT_SOFT:
+    case TURN_RIGHT_SOFT:
+      rightWheelForward(cmd.speedR);
+      leftWheelForward(cmd.speedL);
+      break;
+    case TURN_LEFT_HARD:
+      rightWheelForward(cmd.speedR);
+      leftWheelBackward(cmd.speedL);
+      break;
+    case TURN_RIGHT_HARD:
+      rightWheelBackward(cmd.speedR);
+      leftWheelForward(cmd.speedL);
+      break;
+    case CHECK_FOR_PONDS:
+      isCheckingForPonds = true;
+      break;
+    case STOP_CHECKING_FOR_PONDS:
+      isCheckingForPonds = false;
+      break;
+  }
+
+  handleExitCondition(cmd.exitCondition);
+  return true;
+}
+
+void handleExitCondition(const ExitCondition exitCondition) {
+  const uint16_t condition = exitCondition.condition;
+  bool shouldStop = false;
+
+  switch (exitCondition.exitType) {
+    case TIME:
+      shouldStop = timer.wait(condition);
+      break;
+    
+    case LINES:
+      shouldStop = (condition == getLineNum());
+      if (shouldStop) clearLines();
+      checkForLines(true);
+      break;
+    
+    default:
+      shouldStop = true;
+      break;
+  }
+
+  if (shouldStop) {
+    checkForLines(false);
+    stopDriving();
+    i++;
+  }
+}
+
+void addCmd(Command command) {
+  cmds[numberOfCmds] = command;
+  numberOfCmds++;
+}
+
+void checkForPonds(const bool check) {
+  Command command;
+  command.cmdType = (check) ? CHECK_FOR_PONDS : STOP_CHECKING_FOR_PONDS;
+  command.exitCondition = {NONE, 0};
+  addCmd(command);
+}
+
+void forward(const uint8_t speed, const ExitCondition exitCondition) {
+  Command command;
+  command.exitCondition = exitCondition;
+  command.cmdType = DRIVE_FORWARD;
+  command.speedL = speed;
+  command.speedR = speed;
+  addCmd(command);
+}
+
+void backward(const uint8_t speed, const ExitCondition exitCondition) {
+  Command command;
+  command.exitCondition = exitCondition;
+  command.cmdType = DRIVE_BACKWARD;
+  command.speedL = speed;
+  command.speedR = speed;
+  addCmd(command);
+}
+
+void turnRight(const uint8_t speed, const ExitCondition exitCondition) {
+  Command command;
+  command.exitCondition = exitCondition;
+  command.cmdType = TURN_RIGHT;
+  command.speedR = 0;
+  command.speedL = speed;
+  addCmd(command);
+}
+
+void turnLeft(const uint8_t speed, const ExitCondition exitCondition) {
+  Command command;
+  command.exitCondition = exitCondition;
+  command.cmdType = TURN_LEFT;
+  command.speedR = speed;
+  command.speedL = 0;
+  addCmd(command);
+}
+
+void turnRightHard(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition) {
+  Command command;
+  command.exitCondition = exitCondition;
+  command.cmdType = TURN_RIGHT_HARD;
+  command.speedR = tightness;
+  command.speedL = speed;
+  addCmd(command);
+}
+
+void turnLeftHard(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition) {
+  Command command;
+  command.exitCondition = exitCondition;
+  command.cmdType = TURN_LEFT_HARD;
+  command.speedR = speed;
+  command.speedL = tightness;
+  addCmd(command);
+}
+
+void turnRightSoft(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition) {
+  Command command;
+  command.exitCondition = exitCondition;
+  command.cmdType = TURN_RIGHT_SOFT;
+  command.speedR = 255 - tightness;
+  command.speedL = speed;
+  addCmd(command);
+}
+
+void turnLeftSoft(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition) {
+  Command command;
+  command.exitCondition = exitCondition;
+  command.cmdType = TURN_LEFT_SOFT;
+  command.speedR = speed;
+  command.speedL = 255 - tightness;
+  addCmd(command);
+}

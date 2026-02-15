@@ -120,9 +120,9 @@ void setup() {
   turnRightHard(255, 255, {TIME, 500});
   forward(255, {TIME, 2000});
   
-  checkForPonds(true);
+  detectColor(true);
   turnLeftSoft(255, 255, {TIME, 500});
-  checkForPonds(false);
+  detectColor(false);
   
   Serial.begin(9600);
 
@@ -135,13 +135,18 @@ void setup() {
 
 void loop() {
   updateLineSensor();
+
+  if (isDetectingColor()) {
+    Serial.println("DETECTING COLOR");
+  }
+  
   executeCmds();
 }
 ```
 
 # Experimental Features
 - lockPins(): this has not been tested but it could stop the arduino from starting the motors on code upload.
-- checkForPonds(): Currently only toggles a flag to check for ponds. Does not actaully do anything else yet.
+- detectColor(): Currently only toggles a flag to check for ponds. Does not actaully do anything else yet.
 
 # To-Do:
 1) Colour Sensor Code

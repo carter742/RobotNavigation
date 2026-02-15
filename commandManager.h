@@ -21,9 +21,10 @@ struct ExitCondition {
 };
 
 bool executeCmds();
+bool isDetectingColor();
 
 // Movement Commands
-void checkForPonds(const bool check);
+void detectColor(const bool check);
 
 void forward(const uint8_t speed, const ExitCondition exitCondition);
 void backward(const uint8_t speed, const ExitCondition exitCondition);

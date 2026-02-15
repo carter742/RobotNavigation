@@ -12,8 +12,8 @@ enum CmdType : uint8_t {
   TURN_RIGHT_SOFT,
   TURN_LEFT_HARD,
   TURN_RIGHT_HARD,
-  CHECK_FOR_PONDS,
-  STOP_CHECKING_FOR_PONDS,
+  DETECTING_COLOR,
+  STOP_DETECTING_COLOR,
 };
 
 struct Command {
@@ -30,10 +30,14 @@ Timer timer;
 uint8_t numberOfCmds = 0;
 uint8_t i = 0;
 
-bool isCheckingForPonds = false;
+bool colorDetectingEnabled = false;
 
 void handleExitCondition(const ExitCondition exitCondition);
 void addCmd(Command command);
+
+bool isDetectingColor() {
+  return colorDetectingEnabled;
+}
 
 bool executeCmds() {
   if (i == numberOfCmds) {
@@ -69,11 +73,11 @@ bool executeCmds() {
       rightWheelBackward(cmd.speedR);
       leftWheelForward(cmd.speedL);
       break;
-    case CHECK_FOR_PONDS:
-      isCheckingForPonds = true;
+    case DETECTING_COLOR:
+      colorDetectingEnabled = true;
       break;
-    case STOP_CHECKING_FOR_PONDS:
-      isCheckingForPonds = false;
+    case STOP_DETECTING_COLOR:
+      colorDetectingEnabled = false;
       break;
   }
 
@@ -113,9 +117,9 @@ void addCmd(Command command) {
   numberOfCmds++;
 }
 
-void checkForPonds(const bool check) {
+void detectColor(const bool check) {
   Command command;
-  command.cmdType = (check) ? CHECK_FOR_PONDS : STOP_CHECKING_FOR_PONDS;
+  command.cmdType = (check) ? DETECTING_COLOR : STOP_DETECTING_COLOR;
   command.exitCondition = {NONE, 0};
   addCmd(command);
 }

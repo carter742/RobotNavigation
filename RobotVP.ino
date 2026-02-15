@@ -9,9 +9,9 @@ void setup() {
   turnRightHard(255, 255, {TIME, 500});
   forward(255, {TIME, 2000});
   
-  checkForPonds(true);
+  detectColor(true);
   turnLeftSoft(255, 255, {TIME, 500});
-  checkForPonds(false);
+  detectColor(false);
   
   Serial.begin(9600);
 
@@ -24,5 +24,10 @@ void setup() {
 
 void loop() {
   updateLineSensor();
+
+  if (isDetectingColor()) {
+    Serial.println("CHECKING FOR COLOR");
+  }
+
   executeCmds();
 }

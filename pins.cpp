@@ -21,18 +21,21 @@ void lockPins() {
 
 void initPins() {
   //Wheels
+  digitalWrite(I1, LOW);
+  digitalWrite(I2, LOW);
+
+  digitalWrite(I3, LOW);
+  digitalWrite(I4, LOW);
+
+  analogWrite(ENA, LOW);
+  analogWrite(ENB, LOW);
+
   pinMode(I1, OUTPUT);
   pinMode(I2, OUTPUT);
   pinMode(I3, OUTPUT);
   pinMode(I4, OUTPUT);
   pinMode(ENA, OUTPUT);
   pinMode(ENB, OUTPUT);
-
-  digitalWrite(I1, LOW);
-  digitalWrite(I2, LOW);
-
-  digitalWrite(I3, LOW);
-  digitalWrite(I4, LOW);
 
   //line sensor
   pinMode(SENSOR_PIN, INPUT_PULLUP);

@@ -54,10 +54,10 @@ Parameters:
 
 ### Precise Turning
 For more control over turning these function overloads can be used:
-'''
+```
 void turnRight(const uint8_t speedL, const int16_t speedR, const ExitCondition exitCondition);
 void turnLeft(const uint8_t speedR, const int16_t speedL, const ExitCondition exitCondition);
-'''
+```
 Functionality:
 -  The first paramemter controls the speed.
 -  The second controls the tightness of the turn by varying the speed of the other motor. If the value is negative the motor will go in reverse for extra tight turns. (supports -255 to 255)

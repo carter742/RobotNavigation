@@ -32,10 +32,7 @@ void backward(const uint8_t speed, const ExitCondition exitCondition);
 void turnRight(const uint8_t speed, const ExitCondition exitCondition);
 void turnLeft(const uint8_t speed, const ExitCondition exitCondition);
 
-void turnRightHard(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition);
-void turnLeftHard(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition);
-
-void turnRightSoft(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition);
-void turnLeftSoft(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition);
+void turnRight(const uint8_t speedL, const int16_t speedR, const ExitCondition exitCondition);
+void turnLeft(const uint8_t speedR, const int16_t speedL, const ExitCondition exitCondition);
 
 #endif

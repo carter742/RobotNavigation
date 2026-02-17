@@ -5,7 +5,7 @@
 
 // Wheels
 #define ENB 3 // PWM or analog
-#define ENA 4 // PWM or analog
+#define ENA 5 // PWM or analog
 #define I1 8
 #define I2 9
 #define I3 10

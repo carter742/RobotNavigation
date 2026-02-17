@@ -8,8 +8,6 @@ enum CmdType : uint8_t {
   DRIVE_BACKWARD,
   TURN_LEFT,
   TURN_RIGHT,
-  TURN_LEFT_SOFT,
-  TURN_RIGHT_SOFT,
   TURN_LEFT_HARD,
   TURN_RIGHT_HARD,
   DETECTING_COLOR,
@@ -57,11 +55,6 @@ bool executeCmds() {
       break;
     case TURN_LEFT:
     case TURN_RIGHT:
-      rightWheelForward(cmd.speedR);
-      leftWheelForward(cmd.speedL);
-      break;
-    case TURN_LEFT_SOFT:
-    case TURN_RIGHT_SOFT:
       rightWheelForward(cmd.speedR);
       leftWheelForward(cmd.speedL);
       break;
@@ -160,38 +153,34 @@ void turnLeft(const uint8_t speed, const ExitCondition exitCondition) {
   addCmd(command);
 }
 
-void turnRightHard(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition) {
+void turnRight(const uint8_t speedL, const int16_t speedR, const ExitCondition exitCondition) {
   Command command;
   command.exitCondition = exitCondition;
-  command.cmdType = TURN_RIGHT_HARD;
-  command.speedR = tightness;
-  command.speedL = speed;
+
+  if (speedR < 0) {
+    command.cmdType = TURN_RIGHT_HARD;
+    command.speedR = -speedR;
+  } else {
+    command.cmdType = TURN_RIGHT;
+    command.speedR = speedR;
+  }
+
+  command.speedL = speedL;
   addCmd(command);
 }
 
-void turnLeftHard(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition) {
+void turnLeft(const uint8_t speedR, const int16_t speedL, const ExitCondition exitCondition) {
   Command command;
   command.exitCondition = exitCondition;
-  command.cmdType = TURN_LEFT_HARD;
-  command.speedR = speed;
-  command.speedL = tightness;
-  addCmd(command);
-}
+  command.speedR = speedR;
 
-void turnRightSoft(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition) {
-  Command command;
-  command.exitCondition = exitCondition;
-  command.cmdType = TURN_RIGHT_SOFT;
-  command.speedR = 255 - tightness;
-  command.speedL = speed;
-  addCmd(command);
-}
+  if (speedL < 0) {
+    command.cmdType = TURN_LEFT_HARD;
+    command.speedL = -speedL;
+  } else {
+    command.cmdType = TURN_LEFT;
+    command.speedL = speedL;
+  }
 
-void turnLeftSoft(const uint8_t speed, const uint8_t tightness, const ExitCondition exitCondition) {
-  Command command;
-  command.exitCondition = exitCondition;
-  command.cmdType = TURN_LEFT_SOFT;
-  command.speedR = speed;
-  command.speedL = 255 - tightness;
   addCmd(command);
 }

@@ -4,14 +4,9 @@ void setup() {
   lockPins();
 
   forward(255, {TIME, 1000});
-  turnLeft(255, {TIME, 500});
-  backward(255, {TIME, 1000});
-  turnRightHard(255, 255, {TIME, 500});
-  forward(255, {TIME, 2000});
-  
-  detectColor(true);
-  turnLeftSoft(255, 255, {TIME, 500});
-  detectColor(false);
+  turnLeft(255, {TIME, 1100});
+  forward(255, {TIME, 300});
+  turnRight(150, 20, {TIME, 10000});
   
   Serial.begin(9600);
 

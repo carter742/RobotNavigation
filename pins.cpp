@@ -30,4 +30,7 @@ void initPins() {
   pinMode(ARM_ENA, OUTPUT);
   pinMode(ARM_I1, OUTPUT);
   pinMode(ARM_I2, OUTPUT);
+
+  //start button
+  pinMode(START_BUTTON, INPUT);
 }

@@ -5,6 +5,5 @@ void updateColorSensor();
 
 bool isDetectingLegalFish();
 
-void resetColorSensorDetectionBounds();
-void sampleColorSensorData();
-void averageColorSensorData();
+void resetColorSensorCallibration();
+void callibrateColorSensor(size_t repeat);

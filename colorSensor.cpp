@@ -66,20 +66,27 @@ bool isDetectingLegalFish() {
   return false;
 }
 
-void resetColorSensorDetectionBounds() {
+void resetColorSensorCallibration() {
   MIN_LEGAL_FISH_LIGHT_INTENSITY = 0;
   MAX_LEGAL_FISH_COLOR_TEMP = 0;
   sampleCount = 0;
 }
 
-void sampleColorSensorData() {
-  uint16_t c, colorTemp;
-  getSensorData(&c, &colorTemp);
+void callibrateColorSensor(size_t repeat) {
+  for (size_t i = 0; i < repeat; i++) {
+    uint16_t c, colorTemp;
+    getSensorData(&c, &colorTemp);
 
-  MIN_LEGAL_FISH_LIGHT_INTENSITY += c;
-  MAX_LEGAL_FISH_COLOR_TEMP += colorTemp;
+    MIN_LEGAL_FISH_LIGHT_INTENSITY += c;
+    MAX_LEGAL_FISH_COLOR_TEMP += colorTemp;
+  }
 
-  sampleCount++;
+  sampleCount = repeat; 
+  if (sampleCount == 0)
+    sampleCount = 1;
+  
+  MIN_LEGAL_FISH_LIGHT_INTENSITY /= sampleCount;
+  MAX_LEGAL_FISH_COLOR_TEMP /= sampleCount;
 }
 
 void averageColorSensorData() {

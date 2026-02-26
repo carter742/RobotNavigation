@@ -2,6 +2,11 @@
 #include "armControls.h"
 #include "colorSensor.h"
 #include "lineSensor.h"
+#include "timer.h"
+
+const size_t BUTTON_HOLD_TIME = 500;
+
+bool running = false;
 
 void setup() {
   forward(255, {TIME, 1000});
@@ -20,6 +25,11 @@ void setup() {
 }
 
 void loop() {
+  if (!running) {
+    handleStartUp();
+    return;
+  }
+
   updateLineSensor();
   updateColorSensor();
 
@@ -29,6 +39,25 @@ void loop() {
     pauseCmdExecution(false);
   }
 
-  executeCmds();
+  running = !executeCmds();
 }
 
+void handleStartUp() {
+  static Timer timer;
+  static bool toggle = false;
+
+  bool callibrate = (toggle && timer.wait(BUTTON_HOLD_TIME));
+
+  if (digitalRead(START_BUTTON) && !toggle) {
+    toggle = true;
+  } else if (!digitalRead(START_BUTTON) && toggle) {
+    toggle = false;
+
+    if (callibrate) {
+      resetColorSensorCallibration();
+      callibrateColorSensor(100);
+    } else {
+      running = true;
+    }
+  }
+}

@@ -22,5 +22,8 @@
 #define ARM_I1 7
 #define ARM_I2 6
 
+//Start Button
+#define START_BUTTON 5
+
 //pin setup
 void initPins();

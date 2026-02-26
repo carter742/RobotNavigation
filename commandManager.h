@@ -1,5 +1,4 @@
-#ifndef H_COMMAND_MANAGER
-#define H_COMMAND_MANAGER
+#pragma once
 
 #include "wheelControls.h"
 #include "lineSensor.h"
@@ -21,6 +20,9 @@ struct ExitCondition {
 };
 
 bool executeCmds();
+void pauseCmdExecution(bool paused);
+bool isCmdExecutionPaused();
+
 bool isDetectingColor();
 
 // Movement Commands
@@ -34,5 +36,3 @@ void turnLeft(const uint8_t speed, const ExitCondition exitCondition);
 
 void turnRight(const uint8_t speedL, const int16_t speedR, const ExitCondition exitCondition);
 void turnLeft(const uint8_t speedR, const int16_t speedL, const ExitCondition exitCondition);
-
-#endif

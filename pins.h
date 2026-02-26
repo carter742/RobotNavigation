@@ -1,21 +1,26 @@
-#ifndef H_PINS
-#define H_PINS
+#pragma once
 
 #include <Arduino.h>
 
-// Wheels
-#define ENB 3 // PWM or analog
-#define ENA 5 // PWM or analog
-#define I1 8
-#define I2 9
-#define I3 10
-#define I4 11
+//Wheels
+#define WHEELS_ENB 3 // analog
+#define WHEELS_ENA 2 // analog
+#define WHEELS_I1 8
+#define WHEELS_I2 9
+#define WHEELS_I3 10
+#define WHEELS_I4 11
 
 //Line Sensor
-#define SENSOR_PIN 12
+#define LINE_SENSOR_READ 12
+
+//Color Sensor
+#define COLOR_SENSOR_SCL 5 // analog (library handles set up)
+#define COLOR_SENSOR_SDA 4 // analog (library handles set up)
+
+//Arm
+#define ARM_ENA 1 // analog
+#define ARM_I1 7
+#define ARM_I2 6
 
 //pin setup
-void lockPins();
 void initPins();
-
-#endif

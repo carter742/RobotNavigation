@@ -15,7 +15,7 @@ void updateLineSensor() {
   if (!shouldCheckForLines)
     return;
 
-  if (digitalRead(SENSOR_PIN)) {
+  if (digitalRead(LINE_SENSOR_READ)) {
     blackDetected++;
   } else {
     whiteDetected++;

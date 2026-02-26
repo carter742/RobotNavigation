@@ -1,4 +1,7 @@
 #include "commandManager.h"
+#include "armControls.h"
+#include "colorSensor.h"
+#include "lineSensor.h"
 
 void setup() {
   forward(255, {TIME, 1000});
@@ -7,7 +10,9 @@ void setup() {
   turnRight(150, 20, {TIME, 10000});
   
   Serial.begin(9600);
+
   initPins();
+  initColorSensor();
 
   //delay is detected so that all pins can fully reset 
   //when reset button is pressed.
@@ -16,10 +21,14 @@ void setup() {
 
 void loop() {
   updateLineSensor();
+  updateColorSensor();
 
-  if (isDetectingColor()) {
-    Serial.println("CHECKING FOR COLOR");
+  if (isDetectingColor() && isDetectingLegalFish()) {
+    pauseCmdExecution(true);
+    fireArm();
+    pauseCmdExecution(false);
   }
 
   executeCmds();
 }
+

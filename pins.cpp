@@ -1,42 +1,33 @@
 #include "pins.h"
 
-void lockPins() {
-  //Wheels
-  pinMode(I1, INPUT_PULLUP);
-  pinMode(I2, INPUT_PULLUP);
-  pinMode(I3, INPUT_PULLUP);
-  pinMode(I4, INPUT_PULLUP);
-  pinMode(ENA, INPUT_PULLUP);
-  pinMode(ENB, INPUT_PULLUP);
-
-  digitalWrite(I1, INPUT_PULLUP);
-  digitalWrite(I2, INPUT_PULLUP);
-
-  digitalWrite(I3, INPUT_PULLUP);
-  digitalWrite(I4, INPUT_PULLUP);
-
-  //line sensor
-  pinMode(SENSOR_PIN, INPUT_PULLUP);
-}
-
 void initPins() {
   //Wheels
-  digitalWrite(I1, LOW);
-  digitalWrite(I2, LOW);
+  digitalWrite(WHEELS_I1, LOW);
+  digitalWrite(WHEELS_I2, LOW);
 
-  digitalWrite(I3, LOW);
-  digitalWrite(I4, LOW);
+  digitalWrite(WHEELS_I3, LOW);
+  digitalWrite(WHEELS_I4, LOW);
 
-  analogWrite(ENA, LOW);
-  analogWrite(ENB, LOW);
+  analogWrite(WHEELS_ENA, LOW);
+  analogWrite(WHEELS_ENB, LOW);
 
-  pinMode(I1, OUTPUT);
-  pinMode(I2, OUTPUT);
-  pinMode(I3, OUTPUT);
-  pinMode(I4, OUTPUT);
-  pinMode(ENA, OUTPUT);
-  pinMode(ENB, OUTPUT);
+  pinMode(WHEELS_I1, OUTPUT);
+  pinMode(WHEELS_I2, OUTPUT);
+  pinMode(WHEELS_I3, OUTPUT);
+  pinMode(WHEELS_I4, OUTPUT);
+  pinMode(WHEELS_ENA, OUTPUT);
+  pinMode(WHEELS_ENB, OUTPUT);
 
   //line sensor
-  pinMode(SENSOR_PIN, INPUT_PULLUP);
+  pinMode(LINE_SENSOR_READ, INPUT_PULLUP);
+
+  //Arm
+  digitalWrite(ARM_I1, LOW);
+  digitalWrite(ARM_I2, LOW);
+
+  analogWrite(ARM_ENA, LOW);
+
+  pinMode(ARM_ENA, OUTPUT);
+  pinMode(ARM_I1, OUTPUT);
+  pinMode(ARM_I2, OUTPUT);
 }

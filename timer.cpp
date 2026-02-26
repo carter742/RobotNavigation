@@ -8,7 +8,7 @@ bool Timer::wait(unsigned long time) {
     endTime = this->time + millis();
   }
 
-  if (endTime > millis() && !isPaused)
+  if (endTime > millis() && !paused)
     return false;
 
   endTime = 0;
@@ -16,10 +16,14 @@ bool Timer::wait(unsigned long time) {
 }
 
 void Timer::pause() {
-  isPaused = true;
+  paused = true;
 }
 
 void Timer::unpause() {
-  if (isPaused) endTime = time + millis();
-  isPaused = false;
+  if (paused) endTime = time + millis();
+  paused = false;
+}
+
+bool Timer::isPaused() {
+  return paused;
 }

@@ -29,6 +29,7 @@ uint8_t numberOfCmds = 0;
 uint8_t i = 0;
 
 bool colorDetectingEnabled = false;
+bool executionPaused = false;
 
 void handleExitCondition(const ExitCondition exitCondition);
 void addCmd(Command command);
@@ -38,13 +39,17 @@ bool isDetectingColor() {
 }
 
 bool executeCmds() {
-  if (i == numberOfCmds) {
+  if (isCmdExecutionPaused() || i == numberOfCmds) {
+    timer.pause();
     stopDriving();
     return false;
   }
 
+  if (timer.isPaused()) {
+    timer.unpause();
+  }
+  
   const Command cmd = cmds[i];
-  Serial.println(cmd.cmdType);
 
   switch (cmd.cmdType) {
     case DRIVE_FORWARD:
@@ -108,6 +113,18 @@ void handleExitCondition(const ExitCondition exitCondition) {
 void addCmd(Command command) {
   cmds[numberOfCmds] = command;
   numberOfCmds++;
+}
+
+void pauseCmdExecution(bool paused) {
+  executionPaused = paused;
+  if (paused) {
+    timer.pause();
+    stopDriving();
+  }
+}
+
+bool isCmdExecutionPaused() {
+  return executionPaused;
 }
 
 void detectColor(const bool check) {

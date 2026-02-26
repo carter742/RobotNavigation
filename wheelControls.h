@@ -1,5 +1,4 @@
-#ifndef H_MOTOR_CONTROLS
-#define H_MOTOR_CONTROLS
+#pragma once
 
 #include "timer.h"
 #include "Arduino.h"
@@ -19,5 +18,3 @@ void leftWheelBackward(const uint8_t speed=255);
 
 void leftWheelOff();
 void rightWheelOff();
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef H_LINE_SENSOR
-#define H_LINE_SENSOR
+#pragma once
 
 #include "Arduino.h"
 #include "pins.h"
@@ -12,5 +11,3 @@ uint16_t getLineNum();
 void clearLines();
 void addLine();
 void checkForLines(const bool v);
-
-#endif

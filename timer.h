@@ -1,5 +1,4 @@
-#ifndef H_TIMER
-#define H_TIMER
+#pragma once
 
 #include "Arduino.h"
 
@@ -9,11 +8,11 @@ public:
   bool wait(unsigned long time);
   void pause();
   void unpause();
+  bool isPaused();
+
 
 private:
   unsigned long time = 0;
   unsigned long endTime = 0;
-  bool isPaused = false;
+  bool paused = false;
 };
-
-#endif

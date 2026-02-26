@@ -7,12 +7,18 @@ const uint16_t ENVIRONMENT_DETECTION_TOLERENCE = 50;
 uint16_t MIN_LEGAL_FISH_LIGHT_INTENSITY = 8; //do not change value. (must not be constant for program callibration)
 uint16_t MAX_LEGAL_FISH_COLOR_TEMP = 2500;   //do not change value. (must not be constant for program callibration)
 
+uint16_t sampleCount = 0;
+
 uint16_t legalFishDetectedNum = 0;
 uint16_t environmentDetectedNum = 0;
 
 bool legalFishDetected = false;
 
 Adafruit_TCS34725 tcs = Adafruit_TCS34725();
+
+
+void getSensorData(uint16_t* c, uint16_t* colorTemp);
+
 
 void initColorSensor() {
   if (tcs.begin()) {
@@ -27,12 +33,15 @@ void resetDetection() {
   environmentDetectedNum = 0;
 }
 
-void updateColorSensor() {
-  uint16_t r, g, b, c, colorTemp; //, lux;
+void getSensorData(uint16_t* c, uint16_t* colorTemp) {
+  uint16_t r, g, b;
+  tcs.getRawData(&r, &g, &b, c);
+  *colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c);
+}
 
-  tcs.getRawData(&r, &g, &b, &c);
-  colorTemp = tcs.calculateColorTemperature_dn40(r, g, b, c);
-  // lux = tcs.calculateLux(r, g, b);
+void updateColorSensor() {
+  uint16_t c, colorTemp;
+  getSensorData(&c, &colorTemp);
 
   if (c > MIN_LEGAL_FISH_LIGHT_INTENSITY && colorTemp < MAX_LEGAL_FISH_COLOR_TEMP) {
     legalFishDetectedNum++;
@@ -55,4 +64,27 @@ bool isDetectingLegalFish() {
   }
 
   return false;
+}
+
+void resetColorSensorDetectionBounds() {
+  MIN_LEGAL_FISH_LIGHT_INTENSITY = 0;
+  MAX_LEGAL_FISH_COLOR_TEMP = 0;
+  sampleCount = 0;
+}
+
+void sampleColorSensorData() {
+  uint16_t c, colorTemp;
+  getSensorData(&c, &colorTemp);
+
+  MIN_LEGAL_FISH_LIGHT_INTENSITY += c;
+  MAX_LEGAL_FISH_COLOR_TEMP += colorTemp;
+
+  sampleCount++;
+}
+
+void averageColorSensorData() {
+  if (sampleCount == 0)
+    sampleCount = 1;
+  MIN_LEGAL_FISH_LIGHT_INTENSITY /= sampleCount;
+  MAX_LEGAL_FISH_COLOR_TEMP /= sampleCount;
 }

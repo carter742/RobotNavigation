@@ -109,7 +109,6 @@ void loop() {
 - detectColor(): Currently only toggles a flag to check for ponds. Does not actaully do anything else yet.
 
 # To-Do:
-1) Colour Sensor Code
 2) Arm Motor Code
 3) Turning in reverse
 4) Refine Line Sensor Code
